@@ -1,0 +1,8 @@
+-- Run once in Supabase Dashboard → SQL Editor. Customer data never enters this database.
+create table if not exists public.silaibook_licenses (id uuid primary key default gen_random_uuid(), code text unique not null, active boolean not null default true, device_id text, shop_name text, mobile text, activated_at timestamptz, created_at timestamptz not null default now());
+alter table public.silaibook_licenses enable row level security;
+create or replace function public.activate_silaibook_code(p_code text,p_device_id text,p_shop_name text,p_mobile text) returns jsonb language plpgsql security definer set search_path=public as $$ declare license public.silaibook_licenses; begin select * into license from public.silaibook_licenses where code=upper(trim(p_code)) for update; if not found then return jsonb_build_object('success',false,'message','Invalid activation code.'); end if; if not license.active then return jsonb_build_object('success',false,'message','This activation code is disabled.'); end if; if license.device_id is not null and license.device_id<>p_device_id then return jsonb_build_object('success',false,'message','This code is already used on another device.'); end if; update public.silaibook_licenses set device_id=p_device_id,shop_name=left(p_shop_name,120),mobile=left(p_mobile,30),activated_at=coalesce(activated_at,now()) where id=license.id; return jsonb_build_object('success',true); end; $$;
+revoke all on public.silaibook_licenses from anon,authenticated;
+grant execute on function public.activate_silaibook_code(text,text,text,text) to anon,authenticated;
+-- After a ₹4,999 payment, generate one code:
+-- insert into public.silaibook_licenses(code) values ('SB-7K9P-4X2M');

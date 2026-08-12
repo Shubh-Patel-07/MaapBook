@@ -2,3 +2,7 @@ node_modules/
 .expo/
 dist/
 npm-debug.log*
+*.keystore
+*.jks
+android/.gradle/
+android/app/build/
