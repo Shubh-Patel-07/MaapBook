@@ -10,10 +10,32 @@
     "android": {
       "package": "com.silaibook.app",
       "versionCode": 1,
-      "adaptiveIcon": { "foregroundImage": "./assets/adaptive-icon.png", "backgroundColor": "#123832" },
-      "permissions": []
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#123832"
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
-    "ios": { "bundleIdentifier": "com.silaibook.app", "buildNumber": "1" },
-    "plugins": ["expo-sqlite", ["expo-image-picker", { "photosPermission": "SilaiBook needs photo access to save a customer photo on this device." }]]
+    "ios": {
+      "bundleIdentifier": "com.silaibook.app",
+      "buildNumber": "1"
+    },
+    "plugins": [
+      "expo-sqlite",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "SilaiBook needs photo access to save a customer photo on this device."
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "5ff7acc4-8a09-47e7-897d-75f85779179d"
+      }
+    },
+    "owner": "codexsmp"
   }
 }
